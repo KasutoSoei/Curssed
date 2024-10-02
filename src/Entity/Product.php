@@ -3,8 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ProductRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
@@ -16,152 +15,113 @@ class Product
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $product_name = null;
+    private ?string $title = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $product_description = null;
-
-    #[ORM\Column]
-    private ?int $product_price = null;
-
-    /**
-     * @var Collection<int, Category>
-     */
-    #[ORM\OneToMany(targetEntity: Category::class, mappedBy: 'product')]
-    private Collection $product_category;
+    private ?string $image = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $seller_id = null;
+    private ?string $description = null;
+
+    #[ORM\Column(type: Types::DECIMAL, precision: 7, scale: 2)]
+    private ?string $price = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $buyer_id = null;
+    private ?string $status = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $product_image = null;
+    #[ORM\ManyToOne(inversedBy: 'products')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $seller = null;
 
-    #[ORM\Column]
-    private ?int $product_fav = null;
-
-    public function __construct()
-    {
-        $this->product_category = new ArrayCollection();
-    }
+    #[ORM\ManyToOne(inversedBy: 'products')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Category $category = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getProductName(): ?string
+    public function getTitle(): ?string
     {
-        return $this->product_name;
+        return $this->title;
     }
 
-    public function setProductName(string $product_name): static
+    public function setTitle(string $title): static
     {
-        $this->product_name = $product_name;
+        $this->title = $title;
 
         return $this;
     }
 
-    public function getProductDescription(): ?string
+    public function getImage(): ?string
     {
-        return $this->product_description;
+        return $this->image;
     }
 
-    public function setProductDescription(string $product_description): static
+    public function setImage(string $image): static
     {
-        $this->product_description = $product_description;
+        $this->image = $image;
 
         return $this;
     }
 
-    public function getProductPrice(): ?int
+    public function getDescription(): ?string
     {
-        return $this->product_price;
+        return $this->description;
     }
 
-    public function setProductPrice(int $product_price): static
+    public function setDescription(string $description): static
     {
-        $this->product_price = $product_price;
+        $this->description = $description;
 
         return $this;
     }
 
-    /**
-     * @return Collection<int, Category>
-     */
-    public function getProductCategory(): Collection
+    public function getPrice(): ?string
     {
-        return $this->product_category;
+        return $this->price;
     }
 
-    public function addProductCategory(Category $productCategory): static
+    public function setPrice(string $price): static
     {
-        if (!$this->product_category->contains($productCategory)) {
-            $this->product_category->add($productCategory);
-            $productCategory->setName($this);
-        }
+        $this->price = $price;
 
         return $this;
     }
 
-    public function removeProductCategory(Category $productCategory): static
+    public function getStatus(): ?string
     {
-        if ($this->product_category->removeElement($productCategory)) {
-            // set the owning side to null (unless already changed)
-            if ($productCategory->getName() === $this) {
-                $productCategory->setName(null);
-            }
-        }
+        return $this->status;
+    }
+
+    public function setStatus(string $status): static
+    {
+        $this->status = $status;
 
         return $this;
     }
 
-    public function getSellerId(): ?string
+    public function getSeller(): ?User
     {
-        return $this->seller_id;
+        return $this->seller;
     }
 
-    public function setSellerId(string $seller_id): static
+    public function setSeller(?User $seller): static
     {
-        $this->seller_id = $seller_id;
+        $this->seller = $seller;
 
         return $this;
     }
 
-    public function getBuyerId(): ?string
+    public function getCategory(): ?Category
     {
-        return $this->buyer_id;
+        return $this->category;
     }
 
-    public function setBuyerId(string $buyer_id): static
+    public function setCategory(?Category $category): static
     {
-        $this->buyer_id = $buyer_id;
-
-        return $this;
-    }
-
-    public function getProductImage(): ?string
-    {
-        return $this->product_image;
-    }
-
-    public function setProductImage(string $product_image): static
-    {
-        $this->product_image = $product_image;
-
-        return $this;
-    }
-
-    public function getProductFav(): ?int
-    {
-        return $this->product_fav;
-    }
-
-    public function setProductFav(int $product_fav): static
-    {
-        $this->product_fav = $product_fav;
+        $this->category = $category;
 
         return $this;
     }
