@@ -21,7 +21,7 @@ class Message
     private ?\DateTimeInterface $date = null;
 
     #[ORM\ManyToOne(inversedBy: 'messages')]
-    private ?User $user_id = null;
+    private ?User $sender = null;
 
     public function getId(): ?int
     {
@@ -52,14 +52,14 @@ class Message
         return $this;
     }
 
-    public function getUserId(): ?User
+    public function getSender(): ?User
     {
-        return $this->user_id;
+        return $this->sender;
     }
 
-    public function setUserId(?User $user_id): static
+    public function setSender(?User $sender): static
     {
-        $this->user_id = $user_id;
+        $this->sender = $sender;
 
         return $this;
     }

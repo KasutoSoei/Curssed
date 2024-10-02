@@ -13,14 +13,16 @@ class UserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder->add('username', TextType::class, [
+        /*$builder->add('username', TextType::class, [
             'attr' => [
                 'minLenght' => 6,
                 'maxLenght' => 20,
                 'placeholder' => 'De 6 à 20 charactères',
             ]
         ])
-            ->add('avatar')
+        $builder
+            ->add('avatar')*/
+        $builder
             ->add('mail');
 
         $builder->add('password', PasswordType::class, [

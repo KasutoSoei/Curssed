@@ -100,7 +100,7 @@ class Product
     {
         if (!$this->product_category->contains($productCategory)) {
             $this->product_category->add($productCategory);
-            $productCategory->setProduct($this);
+            $productCategory->setName($this);
         }
 
         return $this;
@@ -110,8 +110,8 @@ class Product
     {
         if ($this->product_category->removeElement($productCategory)) {
             // set the owning side to null (unless already changed)
-            if ($productCategory->getProduct() === $this) {
-                $productCategory->setProduct(null);
+            if ($productCategory->getName() === $this) {
+                $productCategory->setName(null);
             }
         }
 

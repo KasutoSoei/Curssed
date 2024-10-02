@@ -13,22 +13,22 @@ class Category
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'product_category')]
-    private ?Product $product = null;
+    #[ORM\Column(length: 255)]
+    private ?string $name = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getProduct(): ?Product
+    public function getName(): ?Product
     {
-        return $this->product;
+        return $this->name;
     }
 
-    public function setProduct(?Product $product): static
+    public function setName(?Product $name): static
     {
-        $this->product = $product;
+        $this->name = $name;
 
         return $this;
     }
