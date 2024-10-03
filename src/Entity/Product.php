@@ -23,6 +23,9 @@ class Product
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
+    #[ORM\Column]
+    private ?int $favorites = 0;
+
     #[ORM\Column(type: Types::DECIMAL, precision: 7, scale: 2)]
     private ?string $price = null;
 
@@ -52,6 +55,23 @@ class Product
     {
         $this->title = $title;
 
+        return $this;
+    }
+
+    public function getFavorites(): ?int
+    {
+        return $this->favorites;
+    }
+
+    public function setFavorites(int $favorites): self
+    {
+        $this->favorites = $favorites;
+        return $this;
+    }
+
+    public function incrementFavorites(): self
+    {
+        $this->favorites++;
         return $this;
     }
 
