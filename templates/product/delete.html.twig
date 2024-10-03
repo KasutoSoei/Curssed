@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}Hello ProductController!{% endblock %}
 
 {% block body %}
 <style>
@@ -9,13 +9,7 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Liste des produits</h1>
-
-    {% for product in products %}  
-        {{ product.title }} - {{ product.image }} - {{ product.price }}  $
-    {% else %}
-        <p>No products found.</p>
-    {% endfor %}
+    <h1>Delete du produit</h1>
 
 </div>
 {% endblock %}
