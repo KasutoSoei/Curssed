@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Form\ProductFormType;
 use App\Form\UpdateProductFormType;
 use App\Entity\Product;
+use App\Entity\Transaction;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -91,5 +92,33 @@ class ProductController extends AbstractController
         $entityManager->flush();
 
         return $this->redirectToRoute('app_my_account');
+    }
+
+    #[Route('/buy/{id}', name: 'app_buy_product')]
+    public function buyProduct(Request $request, EntityManagerInterface $entityManager, int $id): Response
+    {
+        
+        $product = $entityManager->getRepository(Product::class)->find($id);
+        
+        // Check if the product exists and isn't already sold
+        if (!$product || $product->getStatus()) {
+            throw $this->createNotFoundException('Product not found or already sold.');
+        }
+
+        $user = $this->getUser();
+        $product->setStatus(true);
+        $transaction = new Transaction();
+        $transaction->setBuyer($user);
+        $transaction->setSeller($product->getSeller());
+        $transaction->setProduct($product);
+        $transaction->setDate(new \DateTimeImmutable());
+        // Update the product status to sold
+
+        // Persist the changes
+        $entityManager->persist($product);
+        $entityManager->persist($transaction);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_home');
     }
 }

@@ -22,9 +22,9 @@
 
     {% for product in user.products %}
         <p>
-            {{ product.title }} - {{ product.price }} $
-            <a href="{{ path('app_update_product', {'id': product.id}) }}">modifier</a>
-			<a href="{{ path('app_delete_product', {'id': product.id}) }}">supprimer</a>
+            {{ product.title }} - <img src={{ product.image }}> - {{ product.price }} $
+            <a href="{{ path('app_update_product', {'id': product.id}) }}"><button>modifier</button></a>
+			<a href="{{ path('app_delete_product', {'id': product.id}) }}"><button>supprimer</button></a>
         </p>
     {% else %}
         <p>No products found for this user.</p>

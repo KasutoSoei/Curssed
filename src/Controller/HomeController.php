@@ -14,8 +14,7 @@ class HomeController extends AbstractController
     #[Route('/home', name: 'app_home')]
     public function listAllProducts(EntityManagerInterface $entityManager): Response
     {
-
-        $products = $entityManager->getRepository(Product::class)->findAll();
+        $products = $entityManager->getRepository(Product::class)->findBy(['status' => false,]);
         //dd($products);
 
         return $this->render('home/index.html.twig', [

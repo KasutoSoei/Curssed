@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %} Homepage {% endblock %}
 
 {% block body %}
 <style>
@@ -11,11 +11,16 @@
 <div class="example-wrapper">
     <h1>Liste des produits</h1>
 
-    {% for product in products %}  
-        {{ product.title }} - {{ product.image }} - {{ product.price }}  $
+    <ul>
+    {% for product in products %}      
+        <li>
+        {{ product.title }} - <img src={{ product.image }}> - {{ product.price }}$ - {{ product.status }}
+        <a href="{{ path('app_buy_product', {'id': product.id}) }}"><button>Acheter</button></a>
+        </li>
     {% else %}
         <p>No products found.</p>
     {% endfor %}
+    </ul>
 
 </div>
 {% endblock %}
