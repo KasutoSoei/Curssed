@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}Hello ProductController!{% endblock %}
 
 {% block body %}
 <style>
@@ -9,7 +9,9 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Home {{ controller_name }}! ✅</h1>
+    <h1>Ajout du produit</h1>
+
+    {{form(productForm)}}
 
     
 </div>
