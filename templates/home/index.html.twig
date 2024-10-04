@@ -87,6 +87,7 @@
                     <a href="{{ path('app_buy_product', {'id': product.id}) }}"><button>Buy</button></a>
                 {% endif %}
                 <a href="{{ path('app_user', {'id': product.seller.id}) }}"><button>See seller</button></a>
+                <a href="{{ path('app_product_offer', {'productId': product.id}) }}"><button>Make offer</button></a>
                 <span class="favorites-count" id="fav-count-{{ product.id }}">{{ product.favorites }}</span>
             </div>
         {% endfor %}

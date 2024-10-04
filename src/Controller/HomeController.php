@@ -7,7 +7,6 @@ use App\Entity\Product;
 use App\Entity\User;
 
 use Symfony\Component\HttpFoundation\Request;
-
 use App\Repository\ProductRepository;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
