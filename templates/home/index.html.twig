@@ -82,9 +82,11 @@
                         Aimer
                     {% endif %}
                 </button>
-                <a href="{{ path('app_buy_product', {'id': product.id}) }}"><button>Buy</button></a>
-                <a href="{{ path('app_user', {'id': product.seller.id}) }}"><button>See seller</button></a>
 
+                {% if product.seller.id != user.id %}
+                    <a href="{{ path('app_buy_product', {'id': product.id}) }}"><button>Buy</button></a>
+                {% endif %}
+                <a href="{{ path('app_user', {'id': product.seller.id}) }}"><button>See seller</button></a>
                 <span class="favorites-count" id="fav-count-{{ product.id }}">{{ product.favorites }}</span>
             </div>
         {% endfor %}
