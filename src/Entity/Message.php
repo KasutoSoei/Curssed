@@ -37,6 +37,11 @@ class Message
     #[ORM\ManyToOne]
     private ?Product $product = null;
 
+    public function __construct()
+    {
+        $this->sent_at = new \DateTimeImmutable();
+    }
+
     public function getId(): ?int
     {
         return $this->id;

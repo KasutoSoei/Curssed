@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Message;
 use App\Entity\Product;
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,7 +21,9 @@ class FavProductController extends AbstractController
         $seller = $addLikeProduct->getSeller();
 
         
-        
+        if ($user === $seller) {
+            return new JsonResponse(['success' => false, 'message' => 'You cannot like your own product']);
+        }
 
         if ($user->getLikedProducts()->contains($addLikeProduct)) {
             return new JsonResponse(['success' => false, 'message' => 'You have already liked this product']);
@@ -29,23 +32,34 @@ class FavProductController extends AbstractController
         $user->addLikedProduct($addLikeProduct);
         $addLikeProduct->setFavorites($addLikeProduct->getFavorites() + 1);
 
-       try{
+        $message = new Message();
+        $message->setSender($user);
+        $message->setReceiver($seller);
+
+        if ($user){
+        $message->setContent(
+            $user->getUsername() . " liked the product " . $addLikeProduct->getTitle() . "."
+        );
+        } else {
+            $message->setContent(
+                "User " . $user->getUsername() . " liked your product " . $addLikeProduct->getTitle() . "."
+            );
+        }
+
+        $entityManager->persist($message);
         $entityManager->persist($user);
         $entityManager->persist($addLikeProduct);
         $entityManager->flush();
-       } catch (\Exception $e) {
-            return new JsonResponse(['success' => false, 'message' => 'Error saving to database: ' . $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
-       }
+       
 
-        if ($seller !== $user){
-            $this->addFlash('NOTIFICATION!', "$user liked your product: {$product->getTitle()}");
-        }
+    
 
         return new JsonResponse([
             'success' => true,
             'message' => 'Product favorited successfully',
             'favorites' => $addLikeProduct->getFavorites(),
             'user' => $user,
+
         ]);
     }
 
