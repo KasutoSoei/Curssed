@@ -1,12 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}
-    Homepage
-{% endblock %}
+{% block title %}Hello UserController!{% endblock %}
 
 {% block body %}
-    <style>
-        .products-grid {
+<style>
+    .products-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 20px;
@@ -65,28 +63,32 @@
             font-size: 14px;
             color: #757575;
         }
-    </style>
+</style>
 
-    <div class="products-grid">
-        {% for product in products %}
-            <div class="product-card" id="product-{{ product.id }}">
-                <img src="{{ asset(product.image) }}" alt="{{ product.title }}" class="product-image" />
-                <h1 class="product-title">{{ product.title }}</h1>
-                <p class="product-price">{{ product.price }} $</p>
+<div class="products-grid">
+    <h1>Mes Produits Favoris</h1>
+
+    {% if likedProducts is empty %}
+        <p>Vous n'avez pas encore ajouté de produits aux favoris.</p>
+    {% else %}
+        <ul>
+            {% for product in likedProducts %}
+                <li>{{ product.title }} - {{ product.price }} $</li>
                 <button class="fav-button" data-id="{{ product.id }}" onclick="toggleFavorite(this)">
                     {% if user.getLikedProducts().contains(product) %}
                         Retirer le Like
                     {% else %}
                         Aimer
                     {% endif %}
-                </button>
-                <span class="favorites-count" id="fav-count-{{ product.id }}">{{ product.favorites }}</span>
-            </div>
-        {% endfor %}
-    </div>
-
-    <script>
-        function toggleFavorite(button) {
+                    </button>
+                    <span class="favorites-count" id="fav-count-{{ product.id }}">{{ product.favorites }}</span>
+            {% endfor %}
+            
+        </ul>
+    {% endif %}
+</div>
+<script>
+	function toggleFavorite(button) {
             const productId = button.getAttribute('data-id');
             const isLiking = button.textContent.includes('Aimer');
             const url = isLiking ? `/favorite/${productId}` : `/unfavorite/${productId}`;
@@ -110,6 +112,5 @@
             })
             .catch(error => console.error('Erreur:', error));
         }
-    </script>
-
+</script>
 {% endblock %}
