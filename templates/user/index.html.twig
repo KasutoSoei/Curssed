@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} Homepage {% endblock %}
+{% block title %} User account {% endblock %}
 
 {% block body %}
 <style>
@@ -9,22 +9,16 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Liste des produits</h1>
-
-    {# form(productsFilteredSearchForm) #}
+    <h1> User account </h1>
 
     <ul>
     {% for product in products %}      
         <li>
         {{ product.title }} - <img src={{ product.image }}> - {{ product.price }}$ - {{ product.status }}
-        <a href="{{ path('app_buy_product', {'id': product.id}) }}"><button>Buy</button></a>
-        <a href="{{ path('app_send_offer', {'id': product.id}) }}"><button>Send offer</button></a>
-        <a href="{{ path('app_user', {'id': product.seller.id}) }}"><button>See seller</button></a>
         </li>
     {% else %}
-        <p>No products found.</p>
+        <p>No products found for this user.</p>
     {% endfor %}
     </ul>
-
 </div>
 {% endblock %}

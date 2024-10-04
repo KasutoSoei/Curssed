@@ -55,4 +55,21 @@ class ChatController extends AbstractController
             'receiverId' => $receiverId
         ]);
     }
+
+    #[Route('/offer/{productId}/send', name: 'app_send_offer')]
+    public function sendOffer(Request $request, EntityManagerInterface $entityManager, int $productId): Response
+    {
+        
+        $offer = new Message();
+
+        $offer->setSender($user);
+        $offer->setReceiver($otherUser);
+        $offer->setSentAt(new \DateTimeImmutable());
+
+        // Persist the changes
+        $entityManager->persist($offer);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_home');
+    }
 }

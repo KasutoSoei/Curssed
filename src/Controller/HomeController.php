@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Product;
+use Symfony\Component\HttpFoundation\Request;
 
+use App\Repository\ProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -12,7 +14,7 @@ use Doctrine\ORM\EntityManagerInterface;
 class HomeController extends AbstractController
 {
     #[Route('/home', name: 'app_home')]
-    public function listAllProducts(EntityManagerInterface $entityManager): Response
+    public function index(EntityManagerInterface $entityManager, ProductRepository $productRepository, Request $request): Response
     {
         $products = $entityManager->getRepository(Product::class)->findBy(['status' => false,]);
         //dd($products);
