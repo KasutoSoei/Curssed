@@ -27,7 +27,6 @@ class ProductController extends AbstractController
     #[Route('/add', name: 'app_add_product')]
     public function addProduct(Request $request, EntityManagerInterface $entityManager): Response
     {
-
         $product = new Product();
         $productForm = $this->createForm(ProductFormType::class, $product);
 
@@ -74,7 +73,7 @@ class ProductController extends AbstractController
 
             // Add a flash message and redirect (optional)
             $this->addFlash('success', 'Product updated successfully!');
-            return $this->redirectToRoute('app_my_account'); // Adjust this route as needed
+            return $this->redirectToRoute('app_my_account');
         }
 
         return $this->render('product/update.html.twig', [

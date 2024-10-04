@@ -16,6 +16,31 @@ class MessageRepository extends ServiceEntityRepository
         parent::__construct($registry, Message::class);
     }
 
+    // src/Repository/MessageRepository.php
+
+    public function findUserChats($userId)
+    {
+        return $this->createQueryBuilder('m')
+        ->select('m')
+        ->where('m.sender = :userId OR m.receiver = :userId')
+        ->setParameter('userId', $userId)
+        ->orderBy('m.sent_at', 'DESC')
+        ->getQuery()
+        ->getResult();
+    }
+
+    public function findUserMessages($userId, $otherUser)
+    {
+        return $this->createQueryBuilder('m')
+        ->select('m')
+        ->where('(m.sender = :userId OR m.receiver = :userId) AND (m.sender = :otherUser OR m.receiver = :otherUser)')
+        ->setParameter('userId', $userId)
+        ->setParameter('otherUser', $otherUser)
+        ->orderBy('m.sent_at', 'ASC')
+        ->getQuery()
+        ->getResult();
+    }
+
     //    /**
     //     * @return Message[] Returns an array of Message objects
     //     */

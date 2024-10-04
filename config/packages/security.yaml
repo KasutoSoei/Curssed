@@ -43,6 +43,11 @@ security:
     - { path: ^/admin, roles: ROLE_ADMIN }
     - { path: ^/user, roles: ROLE_USER }
     - { path: ^/add, roles: IS_AUTHENTICATED_FULLY }
+    - { path: ^/buy, roles: IS_AUTHENTICATED_FULLY }
+    - { path: ^/update, roles: IS_AUTHENTICATED_FULLY }
+    - { path: ^/delete, roles: IS_AUTHENTICATED_FULLY }
+    - { path: ^/chats, roles: IS_AUTHENTICATED_FULLY }
+    - { path: ^/myAccount, roles: IS_AUTHENTICATED_FULLY }
 
 when@test:
   security:
