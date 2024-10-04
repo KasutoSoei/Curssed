@@ -96,15 +96,22 @@
                 <p>Connectez-vous pour aimer ce produit</p>
             {% endif %}
 
-                {% if product.seller.id != user.id %}
-                    <a href="{{ path('app_buy_product', {'id': product.id}) }}"><button>Buy</button></a>
-                {% endif %}
+                {% if app.user %}
+                    {% if product.seller.id != user.id %}
+                        <a href="{{ path('app_buy_product', {'id': product.id}) }}"><button>Buy</button></a>
+                    {% endif %}
                 
-                {% if product.seller.id == user.id %}
-                    <a href="{{ path('app_my_account', {'id': product.seller.id}) }}"><button>See seller</button></a>
-                {% endif %}
+                    {% if product.seller.id == user.id %}
+                        <a href="{{ path('app_my_account', {'id': product.seller.id}) }}"><button>See seller</button></a>
+                    {% else %}
+                    <a href="{{ path('app_user', {'id': product.seller.id}) }}"><button>See seller</button></a>
+                    {% endif %}
+                    <a href="{{ path('app_product_offer', {'productId': product.id}) }}"><button>Make offer</button></a>
+                {% else %} 
+                    <span>Login to buy/make offer</span>
+                    <a href="{{ path('app_user', {'id': product.seller.id}) }}"><button>See seller</button></a>
+                {% endif %} 
 
-                <a href="{{ path('app_product_offer', {'productId': product.id}) }}"><button>Make offer</button></a>
                 <span class="favorites-count" id="fav-count-{{ product.id }}">Fav:{{ product.favorites }}</span>
                 
             </div>
