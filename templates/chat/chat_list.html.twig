@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ChatController!{% endblock %}
+
+{% block body %}
+    <h1>Your Chats</h1>
+    {% set seenUsers = [] %} {# Store distinct sender/receiver that is not the user#}
+    <ul>
+        {% for message in chats %}
+            {% set otherUserId = message.receiver.id == app.user.id ? message.sender.id : message.receiver.id %}
+            
+            {# User already seen? #}
+            {% if otherUserId not in seenUsers %}
+                <li>
+                    <a href="{{ path('chat_show', {'receiverId': otherUserId, 'senderId': app.user.id}) }}">
+                        Last message : {{ message.content }}
+                        with user {{otherUserId}}
+                    </a>
+                </li>
+                {% set seenUsers = seenUsers | merge([otherUserId]) %} {# Add to seenUsers #}
+            {% endif %}
+        {% endfor %}
+    </ul>
+{% endblock %}
