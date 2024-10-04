@@ -1,111 +1,114 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-	Homepage
+    Homepage
 {% endblock %}
 
 {% block body %}
-	<style>
-		.products-grid {
-			display: grid;
-			grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-			gap: 20px;
-			padding: 20px;
-		}
+    <style>
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
 
-		.product-card {
-			background-color: #fff;
-			border-radius: 10px;
-			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-			padding: 15px;
-			text-align: center;
-			transition: transform 0.3s ease;
-		}
+        .product-card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
 
-		.product-card:hover {
-			transform: scale(1.05);
-		}
+        .product-card:hover {
+            transform: scale(1.05);
+        }
 
-		.product-image {
-			width: 100%;
-			height: 180px;
-			object-fit: cover;
-			border-radius: 8px;
-			margin-bottom: 10px;
-		}
+        .product-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
 
-		.product-title {
-			font-size: 18px;
-			font-weight: bold;
-			margin: 10px 0;
-		}
+        .product-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
 
-		.product-price {
-			font-size: 16px;
-			color: #007bff;
-			margin-bottom: 10px;
-		}
+        .product-price {
+            font-size: 16px;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
 
-		.fav-button {
-			background-color: #ff5722;
-			color: #fff;
-			border: none;
-			padding: 10px 15px;
-			border-radius: 5px;
-			cursor: pointer;
-			transition: background-color 0.3s ease;
-		}
+        .fav-button {
+            background-color: #ff5722;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
 
-		.fav-button:hover {
-			background-color: #e64a19;
-		}
+        .fav-button:hover {
+            background-color: #e64a19;
+        }
 
-		.favorites-count {
-			margin-top: 5px;
-			font-size: 14px;
-			color: #757575;
-		}
-	</style>
+        .favorites-count {
+            margin-top: 5px;
+            font-size: 14px;
+            color: #757575;
+        }
+    </style>
 
+    <div class="products-grid">
+        {% for product in products %}
+            <div class="product-card" id="product-{{ product.id }}">
+                <img src="{{ asset(product.image) }}" alt="{{ product.title }}" class="product-image" />
+                <h3 class="product-title">{{ product.title }}</h3>
+                <p class="product-price">{{ product.price }} $</p>
+                <button class="fav-button" data-id="{{ product.id }}" onclick="toggleFavorite(this)">
+                    {% if user.getLikedProducts().contains(product) %}
+                        Retirer le Like
+                    {% else %}
+                        Aimer
+                    {% endif %}
+                </button>
+                <span class="favorites-count" id="fav-count-{{ product.id }}">{{ product.favorites }}</span>
+            </div>
+        {% endfor %}
+    </div>
 
-	<div class="example-wrapper">
-		<h1>Liste des produits</h1>
+    <script>
+        function toggleFavorite(button) {
+            const productId = button.getAttribute('data-id');
+            const isLiking = button.textContent.includes('Aimer');
+            const url = isLiking ? `/favorite/${productId}` : `/unfavorite/${productId}`;
 
-		{% for product in products %}
-			<div id="product-{{ product.id }}">
-				<span>{{ product.title }}
-					-
-					{{ product.price }}
-					$
-				</span>
-				<span>Favorites:
-					<span id="fav-count-{{ product.id }}">{{ product.favorites }}</span>
-				</span>
-				<button class="fav-button" data-id="{{ product.id }}">Add to Favorites</button>
-			</div>
-		{% else %}
-			<p>No products found.</p>
-		{% endfor %}
-	</div>
-	<script>
-		document.querySelectorAll('.fav-button').forEach(button => {
-button.addEventListener('click', function () {
-const productId = this.getAttribute('data-id');
-fetch (`/favorite/${productId}`, {
-method: 'POST',
-headers: {
-'Content-Type': 'application/json',
-'X-CSRF-TOKEN': '{{ csrf_token('token') }}'
-}
-}).then(response => response.json()).then(data => {
-if (data.success) {
-const favCountElement = document.getElementById (`fav-count-${productId}`);
-favCountElement.textContent = data.favorites;
-} else {
-alert('Failed to add to favorites');
-}
-}).catch(error => console.error('Error:', error));
-});
-});
-	</script>
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token('token') }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById(`fav-count-${productId}`).textContent = data.favorites;
+                    button.textContent = isLiking ? 'Retirer le Like' : 'Aimer';
+                } else {
+                    alert('Échec de l\'ajout aux favoris');
+                }
+            })
+            .catch(error => console.error('Erreur:', error));
+        }
+    </script>
+
 {% endblock %}

@@ -1,0 +1,48 @@
+{#{% extends 'base.html.twig' %}
+
+{% block title %}Hello UserController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="container">
+    <h1>Mes Produits Favoris</h1>
+
+    {% if likedProducts is empty %}
+        <p>Vous n'avez pas encore ajouté de produits aux favoris.</p>
+    {% else %}
+        <ul>
+            {% for product in likedProducts %}
+                <li>{{ product.title }} - {{ product.price }} $</li>
+                <button class="fav-button" data-id="{{ product.id }}">Like</button>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</div>
+<script>
+	document.querySelectorAll('.fav-button').forEach(button => {
+        button.addEventListener('click', function () {
+    const productId = this.getAttribute('data-id');
+    fetch (`/favorite/${productId}`, {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': '{{ csrf_token('token') }}'
+    }})
+    .then(response => response.json()).then(data => {
+    if (data.success) {
+        const favCountElement = document.getElementById (`fav-count-${productId}`);
+        favCountElement.textContent = data.favorites;
+    } 
+    else {
+        alert('Failed to add to favorites');
+    }})
+    .catch(error => console.error('Error:', error));
+    });
+    
+    });
+</script>
+{% endblock %}

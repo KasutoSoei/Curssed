@@ -50,10 +50,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $username = null;
 
+    #[ORM\ManyToMany(targetEntity: Product::class)]
+    #[ORM\JoinTable(name: 'user_liked_products')]
+    private Collection $likedProducts;
+
     public function __construct()
     {
         $this->products = new ArrayCollection();
         $this->transactions = new ArrayCollection();
+        $this->likedProducts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -157,6 +162,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $product->setSeller(null);
             }
         }
+
+        return $this;
+    }
+
+
+
+    public function getLikedProducts(): Collection
+    {
+        return $this->likedProducts;
+    }
+
+    public function addLikedProduct(Product $product): self
+    {
+        if (!$this->likedProducts->contains($product)) {
+            $this->likedProducts->add($product);
+        }
+
+        return $this;
+    }
+
+    public function removeLikedProduct(Product $product): self
+    {
+        $this->likedProducts->removeElement($product);
 
         return $this;
     }
