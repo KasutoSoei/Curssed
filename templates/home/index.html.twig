@@ -70,22 +70,32 @@
     <h1>Liste des produits</h1>
 
     <div class="products-grid">
+    {% if app.user %}
+            <div class="mb-3">
+                You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+            </div>
+    {% endif %}
         {% for product in products %}
             <div class="product-card" id="product-{{ product.id }}">
                 <img src="{{ asset(product.image) }}" alt="{{ product.title }}" class="product-image" />
                 <h1 class="product-title">{{ product.title }}</h1>
                 <p class="product-price">{{ product.price }} $</p>
+
+                {% if app.user %}
                 <button class="fav-button" data-id="{{ product.id }}" onclick="toggleFavorite(this)">
-                    {% if user.getLikedProducts().contains(product) %}
+                    {% if app.user.getLikedProducts().contains(product) %}
                         Retirer le Like
                     {% else %}
                         Aimer
                     {% endif %}
                 </button>
+            {% else %}
+                <p>Connectez-vous pour aimer ce produit</p>
+            {% endif %}
                 <a href="{{ path('app_buy_product', {'id': product.id}) }}"><button>Buy</button></a>
                 <a href="{{ path('app_user', {'id': product.seller.id}) }}"><button>See seller</button></a>
 
-                <span class="favorites-count" id="fav-count-{{ product.id }}">{{ product.favorites }}</span>
+                <span class="favorites-count" id="fav-count-{{ product.id }}">Fav: {{ product.favorites }}</span>
             </div>
         {% endfor %}
     </div>
