@@ -9,25 +9,43 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
+use Symfony\Component\Validator\Constraints\GreaterThan;
+use Symfony\Component\Validator\Constraints\Type;
 
 class ProductFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('title')
+            ->add('title', TextType::class, [
+                'label' => 'Product Title',
+            ])
             ->add('image')
-            ->add('description')
-            ->add('price')
-            #->add('status')
-            /*->add('seller', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'id',
-            ])*/
+            ->add('description', TextareaType::class, [
+            'label' => 'Product Description',
+            ])
+            ->add('price', MoneyType::class, [
+                'currency' => 'USD',
+                'label' => 'Price',
+                'constraints' => [
+                    new GreaterThan([
+                        'value' => 0,
+                        'message' => 'The price must be greater than 0.'
+                    ]),
+                    new Type([
+                        'type' => ['float', 'numeric', 'integer'],
+                        'message' => 'The price must be a valid number (integer or float).',
+                    ]),
+                ],
+            ])
             ->add('category', EntityType::class, [
                 'class' => Category::class,
-                'choice_label' => 'id',
+                'choice_label' => 'name',
             ])
             // Submit button
             ->add('submit', SubmitType::class, [
