@@ -82,7 +82,6 @@
                         Aimer
                     {% endif %}
                 </button>
-                <a href="{{ path('app_send_offer', {'id': product.id}) }}"><button>Send offer</button></a>
                 <a href="{{ path('app_user', {'id': product.seller.id}) }}"><button>See seller</button></a>
                 <span class="favorites-count" id="fav-count-{{ product.id }}">{{ product.favorites }}</span>
             </div>
