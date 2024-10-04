@@ -18,6 +18,7 @@ class UserController extends AbstractController
 
         return $this->render('user/productLike.html.twig', [
             'likedProducts' => $likedProducts,
+            'user' => $user,
         ]);
     }
 }

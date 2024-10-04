@@ -71,7 +71,7 @@
         {% for product in products %}
             <div class="product-card" id="product-{{ product.id }}">
                 <img src="{{ asset(product.image) }}" alt="{{ product.title }}" class="product-image" />
-                <h3 class="product-title">{{ product.title }}</h3>
+                <h1 class="product-title">{{ product.title }}</h1>
                 <p class="product-price">{{ product.price }} $</p>
                 <button class="fav-button" data-id="{{ product.id }}" onclick="toggleFavorite(this)">
                     {% if user.getLikedProducts().contains(product) %}
@@ -103,6 +103,7 @@
                 if (data.success) {
                     document.getElementById(`fav-count-${productId}`).textContent = data.favorites;
                     button.textContent = isLiking ? 'Retirer le Like' : 'Aimer';
+                    location.reload();
                 } else {
                     alert('Échec de l\'ajout aux favoris');
                 }
