@@ -3,18 +3,33 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
-    <h1>Register</h1>
+<div class="login-form-container">
 
     {{ form_errors(registrationForm) }}
 
     {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.username) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
+    <div class="login-form">
 
-        <button type="submit" class="btn">Register</button>
+        <span id="login-title"> > REGISTER </span>
+
+        {{ form_widget(registrationForm.email, {attr: {class:"login-text", placeholder:"E-Mail"}}) }}
+        {{ form_widget(registrationForm.username, {attr: {class:"login-text", placeholder:"Username"}}) }}
+        {{ form_widget(registrationForm.plainPassword, {attr:{class:"login-text", placeholder:"Password"},
+            label: 'Password'
+        }
+        ) }}
+
+        <div class="remember-me">
+            {{ form_widget(registrationForm.agreeTerms, {attr: {class:"remember-me-checkbox"}}) }}
+            <span> Agree to terms and conditions </span>
+        </div>
+
+        <div class="login-submit-container">
+            <input id="login-submit" type="submit" class="btn" value="Register">
+            <a href="{{path("app_login")}}">Go back to login</a>
+        </div>
+    </div>
     {{ form_end(registrationForm) }}
+
+    </div>
 {% endblock %}
