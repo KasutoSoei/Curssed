@@ -69,6 +69,8 @@
     
     <h1>Liste des produits</h1>
 
+    {{form(productCategoryFilterForm)}}
+
     <div class="products-grid">
     {% if app.user %}
             <div class="mb-3">
@@ -89,13 +91,18 @@
                         Aimer
                     {% endif %}
                 </button>
+
             {% else %}
                 <p>Connectez-vous pour aimer ce produit</p>
             {% endif %}
-                <a href="{{ path('app_buy_product', {'id': product.id}) }}"><button>Buy</button></a>
-                <a href="{{ path('app_user', {'id': product.seller.id}) }}"><button>See seller</button></a>
 
-                <span class="favorites-count" id="fav-count-{{ product.id }}">Fav: {{ product.favorites }}</span>
+                {% if product.seller.id != user.id %}
+                    <a href="{{ path('app_buy_product', {'id': product.id}) }}"><button>Buy</button></a>
+                {% endif %}
+                <a href="{{ path('app_user', {'id': product.seller.id}) }}"><button>See seller</button></a>
+                <a href="{{ path('app_product_offer', {'productId': product.id}) }}"><button>Make offer</button></a>
+                <span class="favorites-count" id="fav-count-{{ product.id }}">Fav:{{ product.favorites }}</span>
+                
             </div>
         {% endfor %}
     </div>

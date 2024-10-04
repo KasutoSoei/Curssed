@@ -6,11 +6,14 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Entity\Message;
+use App\Entity\Product;
+use App\Form\OfferFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use App\Form\ChatType;
 
 class ChatController extends AbstractController
@@ -56,20 +59,39 @@ class ChatController extends AbstractController
         ]);
     }
 
-    #[Route('/offer/{productId}/send', name: 'app_send_offer')]
-    public function sendOffer(Request $request, EntityManagerInterface $entityManager, int $productId): Response
+    #[Route('/offer/{productId}', name: 'app_product_offer')]
+    public function productOffer(Request $request, EntityManagerInterface $entityManager, int $productId, UserInterface $user): Response
     {
-        
+        $product = $entityManager->getRepository(Product::class)->find($productId); // Fetch product info
+
+        //dd($product->getSeller());
+
         $offer = new Message();
+        $offerForm = $this->createForm(OfferFormType::class, $offer);
+        $offerForm->handleRequest($request);
 
-        $offer->setSender($user);
-        $offer->setReceiver($otherUser);
-        $offer->setSentAt(new \DateTimeImmutable());
+        if($offerForm->isSubmitted() && $offerForm->isValid() ) {
+            $offerPrice = $offerForm->get('offer')->getData(); // Get offer price entered by user
+            $receiverId = $product->getSeller(); // Get product seller info
 
-        // Persist the changes
-        $entityManager->persist($offer);
-        $entityManager->flush();
+            $offer->setSender($user);
+            $offer->setReceiver( $receiverId);
+            $offer->setProduct($product);
+    
+            $offer->setOffer($offerPrice);
+            $offer->setContent('Offre :' . $offerPrice); // Message content = new offer price
+            $offer->setSentAt(new \DateTimeImmutable());
 
-        return $this->redirectToRoute('app_home');
+            $entityManager->persist(object: $offer);
+            $entityManager->flush();
+
+            //$this->addFlash('success', 'Successfully sent offer');
+            return $this->redirectToRoute('chat_show', ['receiverId' => $receiverId->getId()]); // Go to chat with product seller
+        }
+
+        return $this->render('product/offer.html.twig', [
+            'product' => $product,
+            'offerForm' => $offerForm->createView(),
+        ]);
     }
 }
