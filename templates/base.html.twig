@@ -8,30 +8,30 @@
 		</title>
 		<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
 		{% block stylesheets %}
-        <style>
-			.notification {
-						    background-color: #e0f7fa;
-						    border-left: 4px solid #00bcd4;
-						    padding: 10px;
-						    margin: 10px 0;
-						    border-radius: 5px;
-						    font-size: 14px;
-						    color: #00796b;
-						    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-						}
-						
-						.notification p {
-						    margin: 0;
-						    font-weight: bold;
-						}
-						
-						.notification .close {
-						    float: right;
-						    cursor: pointer;
-						    font-size: 16px;
-						    color: #00796b;
-						}
-        </style>
+			<style>
+				.notification {
+					background-color: #e0f7fa;
+					border-left: 4px solid #00bcd4;
+					padding: 10px;
+					margin: 10px 0;
+					border-radius: 5px;
+					font-size: 14px;
+					color: #00796b;
+					box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+				}
+
+				.notification p {
+					margin: 0;
+					font-weight: bold;
+				}
+
+				.notification .close {
+					float: right;
+					cursor: pointer;
+					font-size: 16px;
+					color: #00796b;
+				}
+			</style>
 		{% endblock %}
 
 		{% block javascripts %}
@@ -42,12 +42,15 @@
 	</head>
 	<body>
 		{% block body %}
-			{% for message in app.flashes('notification') %}
-				<div class="notification">
-					<span class="close">&times;</span>
-					<p>{{ message }}</p>
-				</div>
-			{% endfor %}
+			<div class="example-wrapper">
+				<h1>Your Notification</h1>
+				<ul>
+					{% for message in app.flashes('notification') %}
+						<li>{{ message }}</li>
+					{% endfor %}
+				</ul>
+
+			</div>
 		{% endblock %}
 	</body>
 </html>
