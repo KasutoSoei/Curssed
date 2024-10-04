@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello MyAccountController!
+{% endblock %}
+
+{% block body %}
+	<style>
+		.example-wrapper {
+			margin: 1em auto;
+			max-width: 800px;
+			width: 95%;
+			font: 18px / 1.5 sans-serif;
+		}
+		.example-wrapper code {
+			background: #F5F5F5;
+			padding: 2px 6px;
+		}
+	</style>
+
+<div class="example-wrapper">
+    <h1>Mon compte : {{ user.username }}</h1>
+
+    {% for product in user.products %}
+        <p>
+            {{ product.title }} - <img src={{ product.image }}> - {{ product.price }} $
+            <a href="{{ path('app_update_product', {'id': product.id}) }}"><button>modifier</button></a>
+			<a href="{{ path('app_delete_product', {'id': product.id}) }}"><button>supprimer</button></a>
+        </p>
+    {% else %}
+        <p>No products found for this user.</p>
+    {% endfor %}
+</div>
+{% endblock %}

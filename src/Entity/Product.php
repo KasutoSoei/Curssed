@@ -23,11 +23,15 @@ class Product
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
+    #[ORM\Column]
+    private ?int $favorites = 0;
+
     #[ORM\Column(type: Types::DECIMAL, precision: 7, scale: 2)]
     private ?string $price = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $status = null;
+    // Modification du champ status : booléen avec false par défaut
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
+    private bool $status = false;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
     #[ORM\JoinColumn(nullable: false)]
@@ -51,6 +55,23 @@ class Product
     {
         $this->title = $title;
 
+        return $this;
+    }
+
+    public function getFavorites(): ?int
+    {
+        return $this->favorites;
+    }
+
+    public function setFavorites(int $favorites): self
+    {
+        $this->favorites = $favorites;
+        return $this;
+    }
+
+    public function incrementFavorites(): self
+    {
+        $this->favorites++;
         return $this;
     }
 
@@ -90,12 +111,13 @@ class Product
         return $this;
     }
 
-    public function getStatus(): ?string
+    // Modification des méthodes getStatus et setStatus pour le booléen
+    public function getStatus(): bool
     {
         return $this->status;
     }
 
-    public function setStatus(string $status): static
+    public function setStatus(bool $status): static
     {
         $this->status = $status;
 

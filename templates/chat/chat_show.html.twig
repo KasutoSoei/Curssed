@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ChatController!{% endblock %}
+
+{% block body %}
+    <h1>Chat with {{ receiverId }}</h1>
+    
+    <div class="chat-messages">
+        {% for message in messages %}
+            <div>
+                <strong>{{ message.sender.id == app.user.id ? 'You' : 'User ' ~ message.sender.id }}:</strong> 
+                {{ message.content }}
+            </div>
+        {% endfor %}
+    </div>
+
+{{form(messageForm)}}
+
+
+{% endblock %}
