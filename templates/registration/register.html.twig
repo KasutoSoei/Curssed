@@ -1,8 +1,17 @@
 {% extends 'base.html.twig' %}
 
+
 {% block title %}Register{% endblock %}
 
+
 {% block body %}
+
+{% if app.user %}
+    <script type="text/javascript">
+    window.location.href = "{{ path('app_home') }}";
+    </script>
+{% endif %}
+
 <div class="login-form-container">
 
     {{ form_errors(registrationForm) }}
