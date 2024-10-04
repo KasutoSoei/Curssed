@@ -72,7 +72,7 @@ class ChatController extends AbstractController
 
         if($offerForm->isSubmitted() && $offerForm->isValid() ) {
             $offerPrice = $offerForm->get('offer')->getData(); // Get offer price entered by user
-            $receiverId = $product->getSeller(); // Get procut seller info
+            $receiverId = $product->getSeller(); // Get product seller info
 
             $offer->setSender($user);
             $offer->setReceiver( $receiverId);

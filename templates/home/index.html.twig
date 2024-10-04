@@ -69,6 +69,8 @@
     
     <h1>Liste des produits</h1>
 
+    {{form(productCategoryFilterForm)}}
+
     <div class="products-grid">
         {% for product in products %}
             <div class="product-card" id="product-{{ product.id }}">
