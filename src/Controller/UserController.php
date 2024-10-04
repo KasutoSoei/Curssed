@@ -26,4 +26,19 @@ class UserController extends AbstractController
             'products' => $products,
         ]);
     }
+
+        #[Route('/myFavorites', name: 'app_user_favorites')]
+    public function myFavorites(): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $likedProducts = $user->getLikedProducts();
+
+        return $this->render('user/productLike.html.twig', [
+            'likedProducts' => $likedProducts,
+            'user' => $user,
+        ]);
+    }
 }
+

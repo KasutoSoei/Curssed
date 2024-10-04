@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}Favorite Products{% endblock %}
+
+{% block body %}
+
+<style>
+        .product-card {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px;
+            text-align: center;
+            transition: box-shadow 0.3s;
+        }
+        .product-card:hover {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        .like-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .like-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">My favorite products</h1>
+   <div class="product-list">
+        {% for product in likedProducts %}
+            <div class="product-card">
+                <h1>{{ product.title }}</h1>
+                <p>{{ product.description }}</p>
+                <p>Favoris: {{ product.favorites }}</p>
+                <button class="like-button" data-id="{{ product.id }}" onclick="toggleFavorite(this)">
+                    Retirer le Like
+                </button>
+            </div>
+        {% else %}
+            <p>Aucun produit aimé.</p>
+        {% endfor %}
+    </div>
+</div>
+
+
+<script>
+        function toggleFavorite(button) {
+            const productId = button.getAttribute('data-id');
+            const isLiking = button.textContent.includes('Retirer le Like');
+            const url = isLiking ? `/unfavorite/${productId}` : `/favorite/${productId}`;
+            
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    button.textContent = isLiking ? 'Aimer' : 'Retirer le Like';
+                    const favoritesCount = button.closest('.product-card').querySelector('p:nth-child(3)');
+                    favoritesCount.textContent = 'Favoris: ' + data.favorites;
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+            });
+        }
+    </script>
+{% endblock %}
